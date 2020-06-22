@@ -1,6 +1,6 @@
 # Node-PBBG
 
-NOTE: some parts are being re-written at the time. Currently, battling will not work. You must download an older release.
+NOTE: Database will be missing some columns.
 
 To-do list:
 - [x] Password hashing
