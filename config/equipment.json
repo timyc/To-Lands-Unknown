@@ -1,0 +1,19 @@
+[{
+	"grade": 0,
+	"name": "Leather"
+}, {
+	"grade": 1,
+	"name": "Reinforced Leather"
+}, {
+	"grade": 2,
+	"name": "Bronze"
+}, {
+	"grade": 3,
+	"name": "Tempered Bronze"
+}, {
+	"grade": 4,
+	"name": "Iron"
+}, {
+	"grade": 5,
+	"name": "Tempered Iron"
+}]

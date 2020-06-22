@@ -1,0 +1,360 @@
+<!doctype html>
+<%if (!loggedIn) { %>
+<script>
+   window.location = "/";
+</script>
+<% } %>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="description" content="A description">
+      <meta name="keywords" content="some,meta,tags">
+      <meta name="viewport" content="initial-scale=1">
+      <title><%= gameName %></title>
+      <!-- Bootstrap stylesheet -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="css/reallybadstyling.css?20190821">
+      <link rel="stylesheet" type="text/css" href="css/rpg-awesome.min.css">
+      <style>
+         body {
+         font-size: 14px;
+         background: #201F22;
+         background-repeat: no-repeat;
+         background-size: cover;
+         background-attachment: fixed;
+         }
+      </style>
+      <noscript>
+         <meta http-equiv="Refresh" content="0;url=nojs">
+      </noscript>
+      <!-- Bootstrap required scripts -->
+      <script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      <script src="https://js.stripe.com/v3"></script>
+      <script src="js/bootbox.min.js"></script>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+      <script src="js/main.js?v=20190911"></script>
+   </head>
+   <body class="text-white" onload="startchat();online();moveMap();">
+      <nav class="navbar navbar-dark sticky-top navbar-expand-lg" style="background-color: rgba(3, 3, 13, 0.7);padding: 0 50px;">
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+               <li class="nav-item active">
+                  <a href="javascript:openpage(14)" class="nav-link text-light font-weight-bold">Players Online: <span id="onlinecount" class="text-success"></span></a>
+               </li>
+            </ul>
+            <ul class="navbar-nav justify-content-end">
+               <li class="nav-item dropdown dropleft">
+                  <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Help
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                     <a class="dropdown-item" href="https://tolandsunknown.miraheze.org" target="_blank">Wiki</a>
+                     <a class="dropdown-item" href="javascript:openpage(9)">FAQ</a>
+                     <a href="javascript:openpage(5)" class="dropdown-item">Commands</a>
+                     <a href="javascript:openpage(4)" class="dropdown-item">Chat Rules</a>
+                     <a href="javascript:openpage(13)" class="dropdown-item">Referral</a>
+                  </div>
+               </li>
+               <li class="nav-item">
+                  <a href="javascript:openpage(3)" class="nav-link text-light">Updates</a>
+               </li>
+               <li class="nav-item">
+                  <a href="https://discord.gg/wJ7jRnT" class="nav-link text-info" target="_blank">Discord</a>
+               </li>
+               <li class="nav-item">
+                  <a href="/logoutAuth" class="nav-link text-danger">Logout</a>
+               </li>
+            </ul>
+         </div>
+      </nav>
+      <div id="backside" class="container text-white" style="max-width:1100px !important; margin-top:10px">
+         <div style="max-width:800px;margin:0 auto; text-align:center">
+            <div id="popupcontainer" class="container text-white">
+               <div id="popupholder" class="row">
+                  <div style="height: 100%;" class="col">
+                     <div style="position:relative; height: 100%; background-color: rgba(3, 3, 13, 0.95); border-radius:5px;border: 1px solid white;" class="card text-white">
+                        <div id="popuptopbar">
+                           <div id="popupclosetextcontainer"><a href="javascript:closepage();" class="text-primary">[X]</a></div>
+                        </div>
+                        <div id="popuprescontainer" class="card-body">
+                           <div id="popupresdisplay">
+                              <div id="popupresponse"></div>
+                              <div id="popup"></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row" id="gameHeader">
+            <div class="col">
+               <div class="card text-white" style="background-color: rgba(6, 6, 18, 0.7);margin-bottom:-0.5px;border-bottom:none">
+                  <div class="card-body" style="background-image: url('img/styles/<%= style %>/space-header2.jpg');background-size:cover">
+                     <div class="row" id="gHeader">
+                        <div class="col text-center">
+                           <img src="img/styles/<%= style %>/logo_small.png" alt="Logo" style="width:20%; height:auto; pointer-events: none;">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);border-bottom:none;border-top:2px solid rgba(3,3,13,0.7)">
+                  <div class="card-body text-center" style="padding:0">
+                     <div style="display:flex">
+                        <a href="javascript:inventory(0, 0, 0);switchToInventoryNav();" class="text-light navbarBtn" style="border-left:none">Inventory</a>
+                        <a href="javascript:openpage(12, 1, 0)" class="text-light navbarBtn">Market</a>
+                        <a href="javascript:dungeons(1);switchToDungeonsNav();" class="text-light navbarBtn">Dungeons</a>
+                        <a href="javascript:openpage(10)" class="text-light navbarBtn">Redeem</a>
+                        <a href="javascript:openpage(11, 1)" class="text-light navbarBtn">Mail</a>
+                        <a href="javascript:guildpage(0);switchToGuildNav();" class="text-light navbarBtn">Guild</a>
+                        <a href="javascript:openpage(2,1)" class="text-light navbarBtn">Rankings</a>
+                        <a href="javascript:openpage(6,1)" class="text-warning navbarBtn" style="border-right:none">Purchase Credits</a>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col">
+               <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);border-bottom:none;border-top:2px solid rgba(3,3,13,0.7)">
+                  <div class="card-body text-center" style="padding:0">
+                     <div>
+                        Current action: <span id="doingThing" class="text-primary">Nothing</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-lg-9" style="padding-left:0">
+               <div class="container">
+                  <div class="row">
+                     <div class="col" style="max-width:250px">
+                        <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-bottom:-0.5px;border-right:none;height:175px;border-top:2px solid rgba(3,3,13,0.7)">
+                           <div class="card-body" style="padding-top:0; padding-right:0; padding-left:0">
+                              <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                                 <div style="text-align:center">Player</div>
+                              </div>
+                              <div class="row" style="margin-top:-20px">
+                                 <div class="col"></div>
+                                 <div class="col">
+                                    <label for="userSelect"></label>
+                                    <select id="userSelect" class="form-control form-control-sm text-white border-secondary" style="background-color: rgba(13, 13, 23, 0.3);margin-top:5px;margin-bottom:5px" onchange="userStuffChange()">
+                                       <option value="1">Info</option>
+                                       <option value="2">Resources</option>
+                                       <option value="3">Stats</option>
+                                    </select>
+                                 </div>
+                                 <div class="col"></div>
+                              </div>
+                              <div id="gInfo">
+                                 <div id="gInfoSub" style="padding-left:10px;padding-right:10px;height:95px">
+                                    <div id="option1">
+                                       <span class="font-weight-bold"><i class="ra ra-player"></i> Name:</span> <a href="javascript:profile(&quot;<%= username %>&quot;);" class="text-light"><%= username %></a><br />
+                                       <span class="font-weight-bold"><i class="ra ra-crown"></i> Rank:</span> <a href="javascript:openpage(8)" class="text-light"><span id="repRank"><%- repRank %></span></a><br />
+                                       <span class="font-weight-bold"><i class="ra ra-aura"></i> Level:</span> <span id="level"><%= level %></span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-book"></i> Exp:</span> <span id="exp"><%= exp %> / <%= expToLevel %></span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-crossed-swords"></i> Guild:</span> <span id="gName"><%if (!guild){ %>-<% } else { %><a href="javascript:guildpage(0);switchToGuildNav();" class="text-light"><%= guild %></a><% } %></span><br />
+                                    </div>
+                                    <div id="option2" style="display:none">
+                                       <span class="font-weight-bold"><i class="ra ra-diamond"></i> Mithril:</span> <span id="mithril"><%= mithril %></span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-pine-tree"></i> Timber:</span> <span id="timber"><%= timber %></span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-rune-stone"></i> Stones:</span> <span id="stones"><%= stones %></span><br />
+                                    </div>
+                                    <div id="option3" style="display:none">
+                                       <span class="font-weight-bold"><i class="ra ra-health"></i> Health:</span> <span id="health"><%= health %> (<%= healthM %>)</span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-sword"></i> Attack:</span> <span id="attack"><%= attack %> (<%= attackM %>)</span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-shield"></i> Defense:</span> <span id="defense"><%= defense %> (<%= defenseM %>)</span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-on-target"></i> Accuracy:</span> <span id="accuracy"><%= (accuracy+5000)/100 %>% (<%= (accuracyM+5000)/100 %>%)</span><br />
+                                       <span class="font-weight-bold"><i class="ra ra-player-dodge"></i> Evasion:</span> <span id="evasion"><%= evasion/100 %>% (<%= evasionM/100 %>%)</span><br />
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-bottom:-0.5px;border-right:none;border-top:none">
+                           <div class="card-body" style="padding: 0;">
+                                 <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0;margin-bottom:0;border-top:none">
+                                    <div style="text-align:center">Funds</div>
+                                 </div>
+                                 <div style="padding-left:10px;padding-right:10px">
+                                    <span class="font-weight-bold"><i class="fas fa-coins"></i> Coins:</span> <span id="gold"><%- gold %></span><br />
+                                    <span class="font-weight-bold"><i class="ra ra-emerald"></i> Credits:</span> <span id="credits"><%= credits %></span><br />
+                                 </div>
+                              </div>
+                           </div>
+                        <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-bottom:-0.5px;border-right:none;border-top:none">
+                           <div class="card-body" style="padding-top:0; padding-right:0; padding-left:0">
+                              <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                                 <div style="text-align:center">Misc</div>
+                              </div>
+                              <div id="quests" style="height:129px">
+                                 <div style="text-align:center">Quests Done: <span id="qNum"><%= quests %></span></div>
+                                 <div id="qInfo" style="text-align:center">
+                                 <% if (reqQuest) { %>Kill <b class="text-warning"><%= reqQuest %></b> "<%= qMonName %>"<% } %>
+                                 </div>
+                                 <br />
+                                 <div style="text-align:center"><input type="button" onclick="quest(0,0)" value="Quest Progress" class="btn btn-outline-light border-white btn-sm"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col">
+                        <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-left:-0.5px;margin-right:-0.5px;border-top:2px solid rgba(3,3,13,0.7)">
+                           <div class="card-body" style="padding-top:0; padding-right:0; padding-left:0">
+                              <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                                 <div style="text-align:center">Main</div>
+                              </div>
+                              <div id="main">
+                                 <div class="row">
+                                    <div class="col">
+                                       <div class="progress" style="background-color: rgba(13, 13, 23, 0.25) !important;margin-bottom:5px">
+                                          <div id="testTimer" class="progress-bar" role="progressbar" style="width: 100%;" aria-valuemin="0" aria-valuemax="100">
+                                             <div style="text-align:center;font-weight:bold;" id="timer" class="justify-content-center d-flex position-absolute w-100">Action Timer: 0</div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col"></div>
+                                    <div class="col">
+                                       <div class="form-group" style="margin-bottom:5px">
+                                          <label for="mainnav"></label>
+                                          <select id="mainnav" class="form-control text-white border-secondary" onchange="mainnav();" style="background-color: rgba(13, 13, 23, 0.3);">
+                                             <option value="1">Battle</option>
+                                             <option value="9">Dungeons</option>
+                                             <option value="3">Story</option>
+                                             <option value="4" id="guildSelect">Guild</option>
+                                             <option value="5">Inventory</option>
+                                             <option value="6">Teleport</option>
+                                             <option value="7">Mithril Training</option>
+                                             <option value="8">Milestones</option>
+                                             <option value="11">Settings</option>
+                                          </select>
+                                       </div>
+                                    </div>
+                                    <div class="col"></div>
+                                 </div>
+                                 <div id="content">
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col">
+                        <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-top:-0.5px;margin-right:-0.5px;border-top:none">
+                           <div class="card-body">
+                              <div id="chat" style="height:268.3px">
+                                 <div class="input-group mb-2">
+                                    <label for="inputchat"></label>
+                                    <input type="text" name="inputchat" autocomplete="off" id="inputchat" class="form-control border-secondary" placeholder="Messages may incur a 2-second delay" onfocus="chatfocused=1;" onblur="chatfocused=0;" onkeyup="keyup(event.keyCode);" style="background-color: rgba(13, 13, 23, 0.3);">
+                                    <div class="input-group-append">
+                                       <input type="button" name="chatbutton" id="chatbutton" class="btn btn-outline-light border-secondary" value="Chat" onclick="sortchat();">
+                                    </div>
+                                 </div>
+                                 <div id="chatwindow"></div>
+                                 <div id="schemediv2"></div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-lg-3" style="padding-left:0;">
+               <div class="row">
+                  <div class="col">
+                     <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-left:-0.5px;margin-bottom:-0.5px;border-left:none;border-top:2px solid rgba(3,3,13,0.7)">
+                        <div id="gMQSidebar" class="card-body" style="padding-top:0;padding-left:0;padding-right:0">
+                           <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                              <div style="text-align:center">Map</div>
+                           </div>
+                           <div class="row">
+                              <div class="col">
+                                 <div id="map">
+                                    <div id="place" class="text-center"></div>
+                                    <div class="row">
+                                       <div class="col"></div>
+                                       <div class="col">
+                                          <div style="text-align:center"><button class="moveBtn" onclick="moveMap(1)" style="margin-bottom:10px"><i class="fa fa-arrow-up fa-3x"></i></button></div>
+                                       </div>
+                                       <div class="col"></div>
+                                    </div>
+                                    <div class="row h-25">
+                                       <div class="col-5"><button class="moveBtn" onclick="moveMap(4)" style="float:right"><i class="fa fa-arrow-left fa-3x"></i></button></div>
+                                       <div class="col text-center"><button class="moveBtn" onclick="teleportBeast()"><i class="fa fa-crosshairs fa-2x text-danger" style="padding-top:8px"></i></button></div>
+                                       <div class="col-5"><button class="moveBtn" onclick="moveMap(2)" style="float:left"><i class="fa fa-arrow-right fa-3x"></i></button></div>
+                                    </div>
+                                    <div class="row">
+                                       <div class="col"></div>
+                                       <div class="col">
+                                          <div style="text-align:center"><button class="moveBtn" onclick="moveMap(3)" style="margin-top:10px;margin-bottom:10px"><i class="fa fa-arrow-down fa-3x"></i></button></div>
+                                       </div>
+                                       <div class="col"></div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-top:-0.5px;margin-left:-0.5px;margin-bottom:-0.5px;border-left:none;border-top:none">
+                        <div class="card-body" style="padding: 0;">
+                           <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                              <div style="text-align:center">Global Boosts</div>
+                           </div>
+                           <div id="gBSidebar" class="text-center">
+                              <div class="row">
+                                 <div class="col text-center">
+                                    <span class="font-weight-bold">Triple:</span> <%if (gTriple >= Math.floor(Date.now())/1000){ %><span class="text-success">Active</span><% } else { %><span class="text-danger">Inactive</span><% } %><br />
+                                    <span class="font-weight-bold">Double:</span> <%if (gDouble >= Math.floor(Date.now())/1000){ %><span class="text-success">Active</span><% } else { %><span class="text-danger">Inactive</span><% } %>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="card text-white" style="background: linear-gradient(#2B2A41, #21212B);margin-top:-0.5px;margin-left:-0.5px;border-left:none;border-top:none;">
+                        <div class="card-body" style="padding-top:0;padding-left:0;padding-right:0">
+                           <div class="card-header" style="background: linear-gradient(#3F3D69, #1A1A20);padding:0">
+                              <div style="text-align:center">Equipment</div>
+                           </div>
+                           <div id="gESidebar" class="text-center">
+                              <div id="equipment" style="margin-top:10px;display:inline-block">
+                                 <div class="list-group list-group-flush text-left" id="list-tab" role="tablist">
+                                    <p class="equipment1" style="margin:0;"><a href="javascript:equip(1);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug1"><%= aug1 %></span>] <span id="name1"><%= name1 %></span> (<span id="equip1"><%= shortsword %></span>)</a></p>
+                                    <p class="equipment2" style="margin:0;"><a href="javascript:equip(2);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug2"><%= aug2 %></span>] <span id="name2"><%= name2 %></span> (<span id="equip2"><%= dagger %></span>)</a></p>
+                                    <p class="equipment3" style="margin:0;"><a href="javascript:equip(3);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug3"><%= aug3 %></span>] <span id="name3"><%= name3 %></span> (<span id="equip3"><%= helmet %></span>)</a></p>
+                                    <p class="equipment4" style="margin:0;"><a href="javascript:equip(4);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug4"><%= aug4 %></span>] <span id="name4"><%= name4 %></span> (<span id="equip4"><%= shoulders %></span>)</a></p>
+                                    <p class="equipment5" style="margin:0;"><a href="javascript:equip(5);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug5"><%= aug5 %></span>] <span id="name5"><%= name5 %></span> (<span id="equip5"><%= wrists %></span>)</a></p>
+                                    <p class="equipment6" style="margin:0;"><a href="javascript:equip(6);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug6"><%= aug6 %></span>] <span id="name6"><%= name6 %></span> (<span id="equip6"><%= gloves %></span>)</a></p>
+                                    <p class="equipment7" style="margin:0;"><a href="javascript:equip(7);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug7"><%= aug7 %></span>] <span id="name7"><%= name7 %></span> (<span id="equip7"><%= chestpiece %></span>)</a></p>
+                                    <p class="equipment8" style="margin:0;"><a href="javascript:equip(8);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug8"><%= aug8 %></span>] <span id="name8"><%= name8 %></span> (<span id="equip8"><%= leggings %></span>)</a></p>
+                                    <p class="equipment9" style="margin:0;"><a href="javascript:equip(9);" class="text-light list-group-item list-group-item-action">&nbsp;[T<span id="aug9"><%= aug9 %></span>] <span id="name9"><%= name9 %></span> (<span id="equip9"><%= boots %></span>)</a></p>
+                                 </div>
+                              </div>
+                              <hr>
+                              <div id="equipstuff" class="text-center">No equipment selected.</div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <footer class="text-center mb-1 mt-1">
+            Copyright &copy; 2019-2020 <a class="text-light" href="https://delta.games/" target="_blank">Delta Games</a>
+         </footer>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,228 @@
+a {
+   text-decoration: none !important;
+}
+
+hr {
+   background-color: rgba(0,0,0,0.3);
+   border:2px solid rgba(3,3,13,0.3);
+   margin-top: unset !important;
+   margin-bottom: unset !important;
+}
+
+.col {
+   padding-left: 0px;
+   padding-right: 0px;
+   overflow: hidden;
+}
+
+.col-6 {
+   padding-left: 0px;
+   padding-right: 0px;
+   overflow: hidden;
+}
+
+.card {
+   border-radius: 0px;
+   border: 2px solid rgba(0, 0, 0, .5)
+}
+
+.card-body {
+   padding-top: 0.5rem;
+   padding-bottom: 0.5rem;
+}
+
+.card-header {
+   border-bottom: 1px solid black !important;
+}
+
+.card-header:first-child {
+   border-radius:0px;
+}
+
+.btn {
+   box-shadow: none !important;
+}
+
+.moveBtn {
+   background: none;
+   border: none;
+   margin: 0;
+   padding: 0;
+   color: #FFF;
+   outline: none;
+}
+
+.moveBtn:focus {
+   outline: none;
+}
+
+.modal-content {
+   color: #000;
+}
+
+.modal-footer {
+   border-top: unset;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+   background-color: #506985;
+}
+
+#chatwindow {
+   min-height: 200px;
+   height: 28vh;
+   overflow: auto;
+   font-size: 13px;
+}
+
+#main {
+   font-size: 14px;
+   height: 366px;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+#gMQSidebar {
+   font-size: 14px;
+   height: 275px;
+   max-width:2700px;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+#gESidebar {
+   font-size: 14px;
+   height: 309px;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+#gBSidebar {
+   height: 43px;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+#popupcontainer,
+#popupcloser {
+   position: absolute;
+   max-width: 800px;
+}
+
+#popuptopbar {
+   z-index: 50;
+   height: 37px;
+}
+
+#popupholder {
+   visibility: hidden;
+   position: relative;
+   z-index: 10;
+   max-width: 800px;
+   height: 625px;
+   overflow: auto;
+   margin-top: 40px;
+}
+
+#popupclosetextcontainer {
+   font-size: 15px;
+   font-weight: bold;
+   position: absolute;
+   right: 10px;
+   margin-top: 7px;
+   z-index: 5001;
+}
+
+#popuprescontainer {
+   height: 100%;
+   overflow: hidden;
+   box-sizing: border-box;
+   padding-top: 35px;
+   width: 100%;
+   position: absolute;
+   top: 0;
+}
+
+#popup {
+   height: 100%;
+   overflow-y: auto;
+   overflow-x: hidden;
+}
+
+#popupresdisplay {
+   position: relative;
+   height: 100%;
+   max-height: 100%;
+}
+
+#inputchat {
+   color: #FFF;
+}
+
+option {
+   background-color: #000;
+}
+
+.progress-bar {
+   background-color: #3F3D69;
+}
+
+.list-group-item {
+   padding: unset;
+   background-color: unset !important;
+   border: none;
+}
+
+.highlight {
+   background-color: #24478f !important;
+}
+
+
+/* width */
+
+ ::-webkit-scrollbar {
+   width: 5px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+   background: #000;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+   background: #3366cc;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+   background: #24478f;
+}
+
+.navbarBtn {
+   background-color: rgba(60,60,100,0.3);
+   border-left: 1px solid rgba(3,3,13,0.7);
+   border-right: 1px solid rgba(3,3,13,0.7);
+   padding-left: 5px;
+   padding-right: 5px;
+   flex-grow: 1;
+}
+
+.navbarBtn:hover {
+   background-color: rgba(60,60,100,0.7);
+}
+
+.blankBtn {
+   background: none;
+   border: none;
+   margin: 0;
+   padding: 0;
+   color: #FFF;
+   outline: none;
+}

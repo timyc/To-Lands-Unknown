@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="A description">
+    <meta name="keywords" content="some,meta,tags">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Shop | <%= gameName %></title>
+    <!-- Bootstrap stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<style>
+    a {
+        color:#F0FFF0;
+        text-decoration:none;
+        display:block;
+    }
+    .card {
+        border-color:white;
+        margin: -0.5px;
+    }
+    .form-control {
+        min-width: 250px;
+    }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #000;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #3366cc;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #24478f;
+    }
+</style>
+<body class="text-white" style="background-size: cover; background: #000 no-repeat fixed center;">
+<span id="checkLogin">
+    <%if (!loggedIn) { %>
+        <script>
+            window.location = "/";
+         </script>
+    <% } %>
+</span>
+<div class="container">
+    <div class="text-center"><a href="/"><img src="img/styles/<%= style %>/logo.png" alt="logo" style="max-width:400px; pointer-events: none;"></a></div>
+    <div class="card" style="background-color: rgba(0, 0, 0, 0.7);">
+        <div class="card-body text-white" style="max-height:1000px;overflow-y:auto;">
+            <h2 class="text-center">Logged in as: <span class="text-primary"><%= username %></span></h2>
+            <div class="row">
+                <div class="col">
+                    <div class="card-deck">
+                        <div class="card mb-3" style="width: 15rem;">
+                            <div class="card-body bg-dark">
+                                <h5 class="card-title">125 Credits (<span class="text-success">$4.99</span>)</h5>
+                                <p class="card-text">Grants 125 non-bound (purchased) credits to the logged in account.</p>
+                                <button
+                                        style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                        class="checkout"
+                                        role="link"
+                                >
+                                    Purchase
+                                </button>
+
+                                <div id="error-message"></div>
+                            </div>
+                        </div>
+                        <div class="card mb-3" style="width: 15rem;">
+                            <div class="card-body bg-dark">
+                                <h5 class="card-title">300 Credits (<span class="text-success">$9.99</span>)</h5>
+                                <p class="card-text">Grants 300 non-bound (purchased) credits to the logged in account.</p>
+                                <button
+                                        style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                        class="checkout"
+                                        role="link"
+                                >
+                                    Purchase
+                                </button>
+
+                                <div id="error-message"></div>
+                            </div>
+                        </div>
+                        <div class="card mb-3" style="width: 15rem;">
+                            <div class="card-body bg-dark">
+                                <h5 class="card-title">750 Credits (<span class="text-success">$19.99</span>)</h5>
+                                <p class="card-text">Grants 750 non-bound (purchased) credits to the logged in account.</p>
+                                <button
+                                        style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                        class="checkout"
+                                        role="link"
+                                >
+                                    Purchase
+                                </button>
+
+                                <div id="error-message"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card-deck">
+                        <div class="card" style="width: 15rem;">
+                            <div class="card-body bg-dark">
+                                <h5 class="card-title">2150 Credits (<span class="text-success">$49.99</span>)</h5>
+                                <p class="card-text">Grants 2150 non-bound (purchased) credits to the logged in account.</p>
+                                <button
+                                        style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                        class="checkout"
+                                        role="link"
+                                >
+                                    Purchase
+                                </button>
+
+                                <div id="error-message"></div>
+                            </div>
+                        </div>
+                        <div class="card" style="width: 15rem;">
+                            <div class="card-body bg-dark">
+                                <h5 class="card-title">6000 Credits (<span class="text-success">$99.99</span>)</h5>
+                                <p class="card-text">Grants 6000 non-bound (purchased) credits to the logged in account.</p>
+                                <button
+                                        style="background-color:#6772E5;color:#FFF;padding:8px 12px;border:0;border-radius:4px;font-size:1em"
+                                        class="checkout"
+                                        role="link"
+                                >
+                                    Purchase
+                                </button>
+
+                                <div id="error-message"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Create a button that your customers click to complete their purchase. Customize the styling to suit your branding. -->
+
+            <script>
+                (function() {
+                    let stripe = Stripe('pk_test_pA5tAIGVUzrET2AdM1SJc7S700PUf1Dyrg');
+                    let checkoutButton = document.getElementsByClassName('checkout');
+                    let itemids = ['sku_GlxBrA5URg7KVo', 'sku_Gm0Yj56njIcyaz', 'sku_Gm0YY7QGVzk384', 'sku_Gm0Y6cGiEq8W6H', 'sku_Gm0Z2Lwkcbp8as'];
+                    for (let i = 0; i < checkoutButton.length; i++) {
+                        checkoutButton[i].addEventListener('click', function () {
+                            // When the customer clicks on the button, redirect
+                            // them to Checkout.
+                            stripe.redirectToCheckout({
+                                items: [{sku: itemids[i], quantity: 1}],
+                                successUrl: window.location.protocol + '//tolandsunknown.com/shop/success',
+                                cancelUrl: window.location.protocol + '//tolandsunknown.com/shop/canceled',
+                            })
+                                .then(function (result) {
+                                    i += 1;
+                                    if (result.error) {
+                                        // If `redirectToCheckout` fails due to a browser or network
+                                        // error, display the localized error message to your customer.
+                                        let displayError = document.getElementById('error-message');
+                                        displayError.textContent = result.error.message;
+                                    }
+                                });
+                        });
+                    }
+
+                })();
+            </script>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap required scripts -->
+<script src="https://code.jquery.com/jquery-3.4.0.min.js" integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
